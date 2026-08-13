@@ -1,0 +1,124 @@
+<Page x:Class="PZManager.Views.ModSandboxPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{StaticResource BgPrimaryBrush}" Title="Mod Sandbox">
+
+    <Page.Resources>
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0"
+                                    Background="{StaticResource BgSecondaryBrush}"
+                                    BorderBrush="{StaticResource BorderSubtleBrush}"
+                                    BorderThickness="0,0,0,0.5">
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                              VerticalScrollBarVisibility="Disabled">
+                                    <TabPanel IsItemsHost="True" Background="Transparent"/>
+                                </ScrollViewer>
+                            </Border>
+                            <ContentPresenter Grid.Row="1" ContentSource="SelectedContent"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="Bd" Background="Transparent"
+                                BorderThickness="0,0,0,2" BorderBrush="Transparent"
+                                Padding="14,10" Margin="0,0,1,0" Cursor="Hand">
+                            <TextBlock Text="{TemplateBinding Header}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource AccentGreenBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource BgHoverBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- top bar -->
+        <Border Grid.Row="0" Background="{StaticResource BgSecondaryBrush}"
+                BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="0,0,0,0.5">
+            <Grid Margin="16,0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Mod Sandbox" Style="{StaticResource PageTitle}" Margin="0,0,10,0"/>
+                    <Border Background="{StaticResource BgActiveBrush}"
+                            BorderBrush="{StaticResource BorderAccentBrush}" BorderThickness="0.5"
+                            CornerRadius="4" Padding="8,2">
+                        <TextBlock x:Name="TbModCount" Text="not scanned"
+                                   FontSize="11" Foreground="{StaticResource AccentGreenBrush}"/>
+                    </Border>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button x:Name="BtnScan" Content="Refresh" Style="{StaticResource DarkButton}"
+                            Margin="0,0,6,0" Click="Scan_Click"
+                            ToolTip="Re-scan SandboxVars.lua — use this after starting the server with new mods"/>
+                    <Button x:Name="BtnSave" Content="Save to file" Style="{StaticResource GreenButton}"
+                            Click="Save_Click" IsEnabled="False"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- body -->
+        <Grid Grid.Row="1">
+
+            <!-- empty state -->
+            <StackPanel x:Name="PanelEmpty" VerticalAlignment="Center" HorizontalAlignment="Center"
+                        MaxWidth="500" Visibility="Visible">
+                <TextBlock Text="No mod sandbox options loaded yet."
+                           FontSize="15" Foreground="{StaticResource TextSecondaryBrush}"
+                           HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                <TextBlock TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource TextDimBrush}"
+                           TextAlignment="Center" LineHeight="22">
+                    Tabs are generated automatically when you open this page.
+                    <LineBreak/><LineBreak/>
+                    Workflow: add mods in Mod Manager → start server (mods download) → stop server → return here.
+                    <LineBreak/><LineBreak/>
+                    Each mod that adds sandbox settings appears as its own tab.
+                    Mods in your list that haven't run yet show as pending placeholders.
+                </TextBlock>
+            </StackPanel>
+
+            <!-- scanning / error -->
+            <StackPanel x:Name="PanelScanning" VerticalAlignment="Center" HorizontalAlignment="Center"
+                        MaxWidth="500" Visibility="Collapsed">
+                <TextBlock x:Name="TbScanStatus" Text="Scanning…"
+                           FontSize="14" Foreground="{StaticResource TextMutedBrush}"
+                           HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
+            </StackPanel>
+
+            <!-- results: one tab per mod, tabs injected at runtime -->
+            <TabControl x:Name="TabControl" Visibility="Collapsed"/>
+
+        </Grid>
+    </Grid>
+</Page>

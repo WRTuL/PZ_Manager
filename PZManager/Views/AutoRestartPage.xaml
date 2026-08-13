@@ -1,0 +1,102 @@
+<Page x:Class="PZManager.Views.AutoRestartPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{StaticResource BgPrimaryBrush}" Title="Auto Restart">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{StaticResource BgSecondaryBrush}"
+                BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="0,0,0,0.5">
+            <Grid Margin="16,0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Auto Restart" Style="{StaticResource PageTitle}" Margin="0,0,10,0"/>
+                    <Border x:Name="StatusBadge" Background="{StaticResource StatusWarnBgBrush}"
+                            BorderBrush="{StaticResource BorderNormalBrush}" BorderThickness="0.5"
+                            CornerRadius="4" Padding="8,2">
+                        <TextBlock x:Name="TbRestartStatus" Text="● disabled"
+                                   FontSize="11" Foreground="{StaticResource StatusWarnFgBrush}"/>
+                    </Border>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button x:Name="BtnStartRestart" Content="Enable Auto-Restart"
+                            Style="{StaticResource GreenButton}" Margin="0,0,6,0" Click="Toggle_Click"/>
+                    <Button Content="Save Config" Style="{StaticResource DarkButton}" Click="SaveConfig_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" Padding="16,12">
+            <StackPanel>
+
+                <!-- schedule -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="SCHEDULE" Style="{StaticResource SectionLabel}" Margin="0,0,0,12"/>
+
+                        <Grid Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Restart every" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" x:Name="TbIntervalHours" Text="6" Margin="0,0,12,0"/>
+                            <TextBlock Grid.Column="2" Text="hours  (e.g. 6 = every 6 real-time hours)"
+                                       Foreground="{StaticResource TextDimBrush}" FontSize="12" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <TextBlock x:Name="TbNextRestart" Text="next restart: —"
+                                   Foreground="{StaticResource TextMutedBrush}" FontSize="12" Margin="0,0,0,4"/>
+                        <TextBlock Text="warnings are sent to players at 30, 15, 5, and 1 minute(s) before restart via RCON."
+                                   Foreground="{StaticResource TextDimBrush}" FontSize="11" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- player warning message -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="PLAYER WARNING MESSAGE" Style="{StaticResource SectionLabel}" Margin="0,0,0,8"/>
+                        <TextBlock Text="use {minutes} as a placeholder for the countdown" FontSize="11"
+                                   Foreground="{StaticResource TextDimBrush}" Margin="0,0,0,8"/>
+                        <TextBox x:Name="TbWarningMsg"
+                                 Text="Server restarting in {minutes} minutes for maintenance."
+                                 Margin="0,0,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- rcon note -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="NOTES" Style="{StaticResource SectionLabel}" Margin="0,0,0,8"/>
+                        <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextMutedBrush}" LineHeight="20">
+                            <Run>• Auto-restart requires the server to be running via the RCON Console tab (Launch Server button).</Run>
+                            <LineBreak/>
+                            <Run>• RCON must be connected for player warnings to be sent — otherwise the restart still happens, warnings are just local-only.</Run>
+                            <LineBreak/>
+                            <Run>• A save command is sent before shutdown to prevent world data loss.</Run>
+                            <LineBreak/>
+                            <Run>• Restart interval is in real-time hours, not in-game hours.</Run>
+                            <LineBreak/>
+                            <Run>• Restarting regularly forces mod updates to take effect — great for keeping B42 servers current.</Run>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+                <!-- log -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="RESTART LOG" Style="{StaticResource SectionLabel}" Margin="0,0,0,8"/>
+                        <Border Background="{StaticResource BgDeepBrush}" CornerRadius="6" Padding="10,8" Height="140">
+                            <ScrollViewer x:Name="LogScroller" VerticalScrollBarVisibility="Auto">
+                                <TextBlock x:Name="TbLog" FontFamily="Consolas, Courier New"
+                                           FontSize="11" Foreground="{StaticResource TextMutedBrush}"
+                                           TextWrapping="Wrap"/>
+                            </ScrollViewer>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

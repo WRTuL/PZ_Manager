@@ -1,0 +1,174 @@
+<Page x:Class="PZManager.Views.AboutPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{StaticResource BgPrimaryBrush}" Title="About">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{StaticResource BgSecondaryBrush}"
+                BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="0,0,0,0.5">
+            <Grid Margin="16,0">
+                <TextBlock Text="About" Style="{StaticResource PageTitle}" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" Padding="16,12">
+            <StackPanel MaxWidth="680" HorizontalAlignment="Left">
+
+                <!-- logo / title block -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <Ellipse Width="10" Height="10" Fill="#FF4F9E6F" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="PZ Manager" FontSize="22" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                        </StackPanel>
+                        <TextBlock FontSize="13"
+                                   Foreground="{StaticResource AccentGreenBrush}" Margin="0,0,0,12"><Run Text="The Build "/><Run Language="en-gb" Text="2.5"/><Run Text=" Years in the Making Edition"/></TextBlock>
+                        <TextBlock TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource TextMutedBrush}" LineHeight="22">
+                            A desktop management tool for Project Zomboid dedicated servers.
+                            Built to make running a PZ server less of a chore — no more editing raw .ini files,
+                            no more hunting down mod IDs by hand, no more separate console window
+                            stealing focus while you're trying to get something done.
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+                <!-- features -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="WHAT IT DOES" Style="{StaticResource SectionLabel}" Margin="0,0,0,12"/>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource FeatureItem}"
+                                       Text="Mod Manager — paste Workshop IDs and auto-scrape both the display name and Mod ID directly from the Steam Workshop page; generates Mods= and WorkshopItems= lines ready to drop into your ini"/>
+                            <TextBlock Style="{StaticResource FeatureItem}"
+                                       Text="Sandbox Editor — full B42 sandbox settings across categorised cards; Speed, Strength, Toughness, and Cognition all support the B42 'Random' value so each zombie rolls its own behaviour independently"/>
+                            <TextBlock Style="{StaticResource FeatureItem}"
+                                       Text="Mod Sandbox — auto-scans SandboxVars.lua on page load and builds one tab per mod; active mods get typed fields (sliders, toggles, dropdowns), mods not yet run show a pending placeholder until you start the server once"/>
+                            <TextBlock Style="{StaticResource FeatureItem}"
+                                       Text="Server Config — edit servertest.ini fields (identity, access, network, performance) without opening Notepad"/>
+                            <TextBlock Style="{StaticResource FeatureItem}"
+                                       Text="RCON Console — launch the server (hidden window, piped output), connect to RCON, send commands with history, tail the live log — stdin fallback keeps everything working even if the RCON port is blocked"/>
+                            <TextBlock Style="{StaticResource FeatureItem}"
+                                       Text="Auto Restart — scheduled restarts on a configurable real-time interval; warns players via RCON (or stdin if RCON is unavailable) at 30, 15, 5, and 1 minute; saves before shutdown; kills the full process tree to ensure clean port release and prevent malformed packet kicks on reconnect"/>
+                            <TextBlock Style="{StaticResource FeatureItem}"
+                                       Text="Export — one-click backup of your mod list, server config, and sandbox settings"/>
+                            <TextBlock Style="{StaticResource FeatureItem}"
+                                       Text="Force Kill — emergency button in Settings that immediately kills the server process tree if graceful shutdown isn't responding"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- credits -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="CREDITS" Style="{StaticResource SectionLabel}" Margin="0,0,0,12"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Developer" Style="{StaticResource FieldLabel}" Margin="0,0,0,12"/>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,12">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Miki  (WRTuL)" Foreground="{StaticResource TextSecondaryBrush}" FontSize="13" VerticalAlignment="Center"/>
+                                    <TextBlock Text="  ·  " Foreground="{StaticResource TextDimBrush}" FontSize="13" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="TbDiscordLink"
+                                               Text="Discord"
+                                               Foreground="{StaticResource AccentGreenBrush}"
+                                               FontSize="13"
+                                               Cursor="Hand"
+                                               TextDecorations="Underline"
+                                               VerticalAlignment="Center"
+                                               ToolTip="discord.com/users/335549600012435456"
+                                               MouseLeftButtonUp="Discord_Click"/>
+                                </StackPanel>
+                                <TextBlock Foreground="{StaticResource TextDimBrush}" FontSize="11" Margin="0,2,0,0"><Run Text="design,"/><Run Language="en-gb" Text=" code, architecture,"/><Run Text=" "/><Run Language="en-gb" Text="crying when nothing is working"/></TextBlock>
+                            </StackPanel>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Built with" Style="{StaticResource FieldLabel}" Margin="0,0,0,12"/>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,12">
+                                <TextBlock Text="Claude  (Anthropic)" Foreground="{StaticResource TextSecondaryBrush}" FontSize="13"/>
+                                <TextBlock Foreground="{StaticResource TextDimBrush}" FontSize="11" Margin="0,2,0,0"><Run Language="en-gb" Text="XAML, regex, code"/><Run Text=", "/><Run Language="en-gb" Text="helping me understand SteamAPI, "/><Run Text="suffering "/><Run Language="en-gb" Text="with"/><Run Text=" WPF quirks"/></TextBlock>
+                            </StackPanel>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Special thanks" Style="{StaticResource FieldLabel}"/>
+                            <StackPanel Grid.Row="2" Grid.Column="1">
+                                <TextBlock Text="The Indie Stone" Foreground="{StaticResource TextSecondaryBrush}" FontSize="13"/>
+                                <TextBlock TextWrapping="Wrap" Foreground="{StaticResource TextDimBrush}" FontSize="11" Margin="0,2,0,0"
+                                           ><Run Text="for making an incredible game that's been "/><Run Language="en-gb" Text="in early access for over 10 years "/><Run Text=" — and for a mod support implementation so delightfully "/><Run Language="en-gb" Text="inconvenient"/><Run Text=" that it inspired this entire tool"/></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- license -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="LICENSE" Style="{StaticResource SectionLabel}" Margin="0,0,0,12"/>
+                        <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextMutedBrush}" LineHeight="22">
+                            Copyright © 2026 Miki (WRTuL). Licensed under the GNU General Public License v3.0.
+                        </TextBlock>
+                        <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextMutedBrush}" LineHeight="22" Margin="0,8,0,0">
+                            This program is free software: you can redistribute it and/or modify it under the terms
+                            of the GNU General Public License as published by the Free Software Foundation, either
+                            version 3 of the License, or (at your option) any later version.
+                        </TextBlock>
+                        <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextMutedBrush}" LineHeight="22" Margin="0,8,0,0">
+                            This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+                            without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+                            See the GNU General Public License for more details.
+                        </TextBlock>
+                        <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextMutedBrush}" LineHeight="22" Margin="0,8,0,0">
+                            Any modified versions of this software must also be distributed under the GPL v3,
+                            with source code made available. You may not distribute this software under a more
+                            restrictive license or incorporate it into proprietary software.
+                        </TextBlock>
+                        <TextBlock x:Name="TbLicenseLink"
+                                   Text="Full license text: gnu.org/licenses/gpl-3.0"
+                                   Foreground="{StaticResource AccentGreenBrush}"
+                                   FontSize="12" Cursor="Hand" TextDecorations="Underline"
+                                   Margin="0,8,0,0" MouseLeftButtonUp="License_Click"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="BUILD INFO" Style="{StaticResource SectionLabel}" Margin="0,0,0,12"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="PZ Manager version" Style="{StaticResource FieldLabel}" Margin="0,0,0,8"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="TbVersion"
+                                       Foreground="{StaticResource TextSecondaryBrush}" FontSize="13" Margin="0,0,0,8"><Run Text="1."/><Run Language="en-gb" Text="12"/><Run Text="."/><Run Language="en-gb" Text="97"/></TextBlock>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Target game version" Style="{StaticResource FieldLabel}" Margin="0,0,0,8"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="Project Zomboid 42.x (Build 42 Stable)" Foreground="{StaticResource TextSecondaryBrush}" FontSize="13" Margin="0,0,0,8"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Framework" Style="{StaticResource FieldLabel}" Margin="0,0,0,8"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text=".NET 8 / WPF  (win-x64)" Foreground="{StaticResource TextSecondaryBrush}" FontSize="13" Margin="0,0,0,8"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Settings stored at" Style="{StaticResource FieldLabel}"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" x:Name="TbSettingsPath"
+                                       Foreground="{StaticResource MonoGreenBrush}" FontFamily="Consolas, Courier New"
+                                       FontSize="11" TextWrapping="Wrap"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

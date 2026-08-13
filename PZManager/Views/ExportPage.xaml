@@ -1,0 +1,25 @@
+<Page x:Class="PZManager.Views.ExportPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{StaticResource BgPrimaryBrush}" Title="Export">
+    <Grid>
+        <Grid.RowDefinitions><RowDefinition Height="48"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="{StaticResource BgSecondaryBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="0,0,0,0.5">
+            <Grid Margin="16,0"><TextBlock Text="Export" Style="{StaticResource PageTitle}" VerticalAlignment="Center"/></Grid>
+        </Border>
+        <ScrollViewer Grid.Row="1" Padding="16,12">
+            <Border Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="EXPORT OPTIONS" Style="{StaticResource SectionLabel}"/>
+                    <TextBlock Text="Backup your mod list, server config, and sandbox settings." Foreground="{StaticResource TextMutedBrush}" FontSize="13" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                    <WrapPanel Orientation="Horizontal">
+                        <Button Content="Export Mod List (.txt)" Style="{StaticResource DarkButton}" Margin="0,0,8,8" Click="ExportMods_Click"/>
+                        <Button Content="Export Config (.ini)" Style="{StaticResource DarkButton}" Margin="0,0,8,8" Click="ExportIni_Click"/>
+                        <Button Content="Export Sandbox (.lua)" Style="{StaticResource DarkButton}" Margin="0,0,8,8" Click="ExportSandbox_Click"/>
+                    </WrapPanel>
+                    <TextBlock x:Name="TbExportStatus" Text="" FontSize="12" Foreground="{StaticResource AccentGreenBrush}" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+    </Grid>
+</Page>

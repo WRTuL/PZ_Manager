@@ -1,0 +1,429 @@
+<Page x:Class="PZManager.Views.SandboxPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:conv="clr-namespace:PZManager.Converters"
+      Background="{StaticResource BgPrimaryBrush}" Title="Sandbox">
+
+    <Page.Resources>
+        <conv:ZombieSpeedConverter      x:Key="SpeedConv"/>
+        <conv:ZombieStrengthConverter   x:Key="StrengthConv"/>
+        <conv:ZombieToughnessConverter  x:Key="ToughnessConv"/>
+        <conv:CognitionConverter        x:Key="CognConv"/>
+        <conv:MemoryConverter           x:Key="MemConv"/>
+        <conv:SightConverter            x:Key="SightConv"/>
+        <conv:HearingConverter          x:Key="HearingConv"/>
+        <conv:TransmissionConverter     x:Key="TransConv"/>
+        <conv:MortalityConverter        x:Key="MortConv"/>
+        <conv:ReanimateConverter        x:Key="ReanimConv"/>
+        <conv:CrawlConverter            x:Key="CrawlConv"/>
+        <conv:LootAbundanceConverter    x:Key="LootConv"/>
+        <conv:PopulationConverter       x:Key="PopConv"/>
+        <conv:MonthNameConverter        x:Key="MonthConv"/>
+        <conv:VehicleSpawnConverter     x:Key="VehConv"/>
+        <Style x:Key="SRow" TargetType="Grid">
+            <Setter Property="Margin" Value="0,0,0,14"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- top bar -->
+        <Border Grid.Row="0" Background="{StaticResource BgSecondaryBrush}"
+                BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="0,0,0,0.5">
+            <Grid Margin="16,0">
+                <TextBlock Text="Sandbox Editor  —  Build 42" Style="{StaticResource PageTitle}" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Content="Load from file" Style="{StaticResource DarkButton}" Click="Load_Click" Margin="0,0,6,0"/>
+                    <Button Content="Save to file"   Style="{StaticResource GreenButton}" Click="Save_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="16,12">
+            <StackPanel x:Name="SandboxPanel">
+
+                <!-- ════════════════════════════════════════
+                     ZOMBIE LORE
+                ════════════════════════════════════════ -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="ZOMBIE LORE" Style="{StaticResource SectionLabel}" Margin="0,0,0,14"/>
+
+                        <!-- Population -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Population" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlZombies" Minimum="1" Maximum="5" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlZombies, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlZombies, Converter={StaticResource PopConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Speed: 1=Sprinters 2=Fast Shamblers 3=Shamblers 4=Random -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Speed" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlSpeed" Minimum="1" Maximum="4" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlSpeed, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlSpeed, Converter={StaticResource SpeedConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Sprinter Percentage (only relevant when Speed=4 Random) -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Sprinter %" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"
+                                       ToolTip="When Speed is Random, percentage of zombies that are sprinters"/>
+                            <Slider Grid.Column="1" x:Name="SlSprinterPct" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlSprinterPct, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="%"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Strength: 1=Superhuman 2=Normal 3=Weak 4=Random -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Strength" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlStrength" Minimum="1" Maximum="4" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlStrength, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlStrength, Converter={StaticResource StrengthConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Toughness: 1=Tough 2=Normal 3=Fragile 4=Random -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Toughness" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlToughness" Minimum="1" Maximum="4" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlToughness, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlToughness, Converter={StaticResource ToughnessConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Transmission: 1=Blood+Saliva 2=SalivaOnly 3=Everyone 4=None -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Transmission" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlTransmission" Minimum="1" Maximum="4" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlTransmission, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlTransmission, Converter={StaticResource TransConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Mortality: 1=Instant ... 7=Never -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Mortality" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlMortality" Minimum="1" Maximum="7" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlMortality, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlMortality, Converter={StaticResource MortConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Reanimate: 1=Instant ... 6=1-2 Weeks -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Reanimate" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlReanimate" Minimum="1" Maximum="6" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlReanimate, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlReanimate, Converter={StaticResource ReanimConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Cognition: 1=Navigate+Doors 2=Navigate 3=Basic 4=Random -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Cognition" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlCognition" Minimum="1" Maximum="4" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlCognition, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlCognition, Converter={StaticResource CognConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Door Opening % -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Door Opening %" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"
+                                       ToolTip="% of zombies that can open doors (when Cognition includes door navigation)"/>
+                            <Slider Grid.Column="1" x:Name="SlDoorPct" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlDoorPct, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="%"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Crawl Under Vehicle: 1=CrawlersOnly ... 7=Always -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Crawl Under Vehicles" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlCrawl" Minimum="1" Maximum="7" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlCrawl, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlCrawl, Converter={StaticResource CrawlConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Memory: 1=Long 2=Normal 3=Short 4=None 5=Random 6=Rnd(Normal-None) -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Memory" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlMemory" Minimum="1" Maximum="6" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlMemory, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlMemory, Converter={StaticResource MemConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Sight: 1=Eagle 2=Normal 3=Poor 4=Random 5=Rnd(Normal-Poor) -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Sight" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlSight" Minimum="1" Maximum="5" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlSight, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlSight, Converter={StaticResource SightConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Hearing: 1=Pinpoint 2=Normal 3=Poor 4=Random 5=Rnd(Normal-Poor) -->
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Hearing" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlHearing" Minimum="1" Maximum="5" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlHearing, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlHearing, Converter={StaticResource HearingConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
+
+                <!-- ════════════════════════════════════════
+                     LOOT
+                ════════════════════════════════════════ -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="LOOT" Style="{StaticResource SectionLabel}" Margin="0,0,0,14"/>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Food" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlFoodLoot" Minimum="1" Maximum="5" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlFoodLoot, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlFoodLoot, Converter={StaticResource LootConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Weapons" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlWeaponLoot" Minimum="1" Maximum="5" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlWeaponLoot, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlWeaponLoot, Converter={StaticResource LootConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Other" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlOtherLoot" Minimum="1" Maximum="5" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlOtherLoot, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlOtherLoot, Converter={StaticResource LootConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Generators" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlGenerators" Minimum="1" Maximum="5" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlGenerators, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlGenerators, Converter={StaticResource LootConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Vehicles" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlVehicles" Minimum="1" Maximum="5" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlVehicles, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlVehicles, Converter={StaticResource VehConv}}"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- ════════════════════════════════════════
+                     WORLD
+                ════════════════════════════════════════ -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="WORLD" Style="{StaticResource SectionLabel}" Margin="0,0,0,14"/>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Start Month" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlStartMonth" Minimum="1" Maximum="12" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlStartMonth, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlStartMonth, Converter={StaticResource MonthConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Start Year" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlStartYear" Minimum="1" Maximum="50" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlStartYear, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="year"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Water Shutoff (days)" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlWater" Minimum="0" Maximum="365" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlWater, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="days"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Electricity Shutoff" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlElec" Minimum="0" Maximum="365" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlElec, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="days"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Erosion Speed" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlErosion" Minimum="1" Maximum="5" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlErosion, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlErosion, Converter={StaticResource PopConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <WrapPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <CheckBox x:Name="CbFireSpread" Content="Fire Spread" Margin="0,0,24,8" Checked="Toggle_Changed" Unchecked="Toggle_Changed"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- ════════════════════════════════════════
+                     PLAYER
+                ════════════════════════════════════════ -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="PLAYER" Style="{StaticResource SectionLabel}" Margin="0,0,0,14"/>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="XP Multiplier" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlXp" Minimum="1" Maximum="10" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlXp, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="multiplier"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Respawn Hours" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlRespawn" Minimum="0" Maximum="720" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlRespawn, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="hours"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <WrapPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <CheckBox x:Name="CbNightsQuick"   Content="Nights are Quick"  Margin="0,0,24,8" Checked="Toggle_Changed" Unchecked="Toggle_Changed"/>
+                            <CheckBox x:Name="CbSleepAllowed"  Content="Sleep Allowed"     Margin="0,0,24,8" Checked="Toggle_Changed" Unchecked="Toggle_Changed"/>
+                            <CheckBox x:Name="CbSleepNeeded"   Content="Sleep Needed"      Margin="0,0,24,8" Checked="Toggle_Changed" Unchecked="Toggle_Changed"/>
+                            <CheckBox x:Name="CbSurvivalMode"  Content="Survival Mode"     Margin="0,0,24,8" Checked="Toggle_Changed" Unchecked="Toggle_Changed"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- ════════════════════════════════════════
+                     MULTIPLAYER
+                ════════════════════════════════════════ -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="MULTIPLAYER" Style="{StaticResource SectionLabel}" Margin="0,0,0,14"/>
+
+                        <WrapPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <CheckBox x:Name="CbPvp"              Content="PvP"                       Margin="0,0,24,8" Checked="Toggle_Changed" Unchecked="Toggle_Changed"/>
+                            <CheckBox x:Name="CbSafehouse"        Content="Safehouse"                 Margin="0,0,24,8" Checked="Toggle_Changed" Unchecked="Toggle_Changed"/>
+                            <CheckBox x:Name="CbFactions"         Content="Factions"                  Margin="0,0,24,8" Checked="Toggle_Changed" Unchecked="Toggle_Changed"/>
+                            <CheckBox x:Name="CbAntiCheat"        Content="Anti-Cheat"                Margin="0,0,24,8" Checked="Toggle_Changed" Unchecked="Toggle_Changed"/>
+                            <CheckBox x:Name="CbConstruction"     Content="Construction Blocks Spawn"  Margin="0,0,24,8" Checked="Toggle_Changed" Unchecked="Toggle_Changed"/>
+                        </WrapPanel>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Max Accounts / User" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlMaxAccounts" Minimum="0" Maximum="10" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlMaxAccounts, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="0 = unlimited"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- ════════════════════════════════════════
+                     NATURE & ANIMALS (B42)
+                ════════════════════════════════════════ -->
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="NATURE &amp; ANIMALS  —  new in B42" Style="{StaticResource SectionLabel}" Margin="0,0,0,14"/>
+
+                        <Grid Style="{StaticResource SRow}">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Animal Population" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <Slider Grid.Column="1" x:Name="SlAnimals" Minimum="1" Maximum="5" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Slider_Changed"/>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource SliderNum}" Text="{Binding Value, ElementName=SlAnimals, StringFormat={}{0:0}}"/>
+                                <TextBlock Style="{StaticResource SliderLabel}" Text="{Binding Value, ElementName=SlAnimals, Converter={StaticResource PopConv}}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <WrapPanel Orientation="Horizontal">
+                            <CheckBox x:Name="CbAnimalTracking" Content="Animal Tracking" Margin="0,0,24,8" Checked="Toggle_Changed" Unchecked="Toggle_Changed"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock x:Name="TbSandboxStatus" Text="" FontSize="12"
+                           Foreground="{StaticResource AccentGreenBrush}" Margin="4,0,0,16"/>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

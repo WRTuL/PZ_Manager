@@ -1,0 +1,79 @@
+<Page x:Class="PZManager.Views.ServerConfigPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{StaticResource BgPrimaryBrush}" Title="Server Config">
+    <Grid>
+        <Grid.RowDefinitions><RowDefinition Height="48"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="{StaticResource BgSecondaryBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="0,0,0,0.5">
+            <Grid Margin="16,0">
+                <TextBlock Text="Server Config" Style="{StaticResource PageTitle}" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Content="Reload" Style="{StaticResource DarkButton}" Margin="0,0,6,0" Click="Reload_Click"/>
+                    <Button Content="Save to .ini" Style="{StaticResource GreenButton}" Click="Save_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="16,12">
+            <StackPanel>
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="IDENTITY" Style="{StaticResource SectionLabel}" Margin="0,0,0,12"/>
+                        <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Public Name" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" x:Name="TbPublicName"/></Grid>
+                        <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Description" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" x:Name="TbPublicDesc"/></Grid>
+                        <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Welcome Message" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" x:Name="TbWelcome"/></Grid>
+                        <CheckBox x:Name="CbPublic" Content="List as public server" Margin="160,4,0,0"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="ACCESS" Style="{StaticResource SectionLabel}" Margin="0,0,0,12"/>
+                        <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Server Password" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" x:Name="TbPassword"/></Grid>
+                        <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Admin Password" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" x:Name="TbAdminPw"/></Grid>
+                        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="120"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Max Players" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" x:Name="TbMaxPlayers"/></Grid>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="NETWORK" Style="{StaticResource SectionLabel}" Margin="0,0,0,12"/>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="120"/><ColumnDefinition Width="40"/><ColumnDefinition Width="160"/><ColumnDefinition Width="120"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Game Port" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" x:Name="TbPort"/>
+                            <TextBlock Grid.Column="3" Text="UDP Port" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="4" x:Name="TbUdpPort"/>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="120"/><ColumnDefinition Width="40"/><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="RCON Port" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" x:Name="TbRconPort"/>
+                            <TextBlock Grid.Column="3" Text="RCON Password" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="4" x:Name="TbRconPw"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="PERFORMANCE" Style="{StaticResource SectionLabel}" Margin="0,0,0,12"/>
+                        <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="JVM Args" Style="{StaticResource FieldLabel}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" x:Name="TbJvm" FontFamily="Consolas, Courier New"/></Grid>
+                        <CheckBox x:Name="CbPauseEmpty" Content="Pause when server is empty" Margin="160,4,0,0"/>
+                    </StackPanel>
+                </Border>
+                <TextBlock x:Name="TbConfigStatus" Text="" FontSize="12" Foreground="{StaticResource AccentGreenBrush}" Margin="4,0,0,16"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
