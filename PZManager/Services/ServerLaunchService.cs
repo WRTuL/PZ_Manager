@@ -66,7 +66,7 @@ namespace PZManager.Services
         }
 
         /// <summary>
-        /// Graceful stop: send quit via stdin, wait up to 15s, then kill the whole process tree.
+        /// Graceful stop: send quit via stdin, wait up to 25s, then kill the whole process tree.
         /// PZ spawns a child JVM — killing only the bat process leaves it running and holding the port.
         /// </summary>
         public void Stop()
@@ -74,8 +74,8 @@ namespace PZManager.Services
             if (_process is not { HasExited: false }) return;
             try { _process.StandardInput.WriteLine("quit"); } catch { }
 
-            // give PZ up to 15s to save and shut down cleanly before we pull the plug
-            if (!_process.WaitForExit(15_000))
+            // give PZ up to 25s to save and shut down cleanly before we pull the plug
+            if (!_process.WaitForExit(25_000))
             {
                 OutputReceived?.Invoke("[server] graceful shutdown timed out — force-killing process tree", true);
                 KillProcessTree(_process);
@@ -98,7 +98,7 @@ namespace PZManager.Services
         }
 
         /// Kills a process and all its child processes recursively.
-        /// Required on Windows because bat → java is a process tree, not a single process.
+        /// Required on Windows because bat -> java is a process tree, not a single process.
         private static void KillProcessTree(Process root)
         {
             try
